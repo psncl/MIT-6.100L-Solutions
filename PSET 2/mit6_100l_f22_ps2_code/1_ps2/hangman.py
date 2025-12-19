@@ -55,7 +55,7 @@ def has_player_won(secret_word, letters_guessed):
         False otherwise
     """
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    return all(ch in set(letters_guessed) for ch in secret_word)
 
 
 def get_word_progress(secret_word, letters_guessed):
@@ -68,7 +68,11 @@ def get_word_progress(secret_word, letters_guessed):
         which letters in secret_word have not been guessed so far
     """
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    fuzz_guess = ""
+    for ch in secret_word:
+      fuzz_guess += ch if ch in letters_guessed else "*"
+    
+    return fuzz_guess
 
 
 def get_available_letters(letters_guessed):
@@ -81,7 +85,7 @@ def get_available_letters(letters_guessed):
       alphabetical order
     """
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    return ''.join([ch for ch in string.ascii_lowercase if ch not in letters_guessed])
 
 
 
