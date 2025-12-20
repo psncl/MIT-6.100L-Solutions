@@ -87,7 +87,22 @@ def get_available_letters(letters_guessed):
     # FILL IN YOUR CODE HERE AND DELETE "pass"
     return ''.join([ch for ch in string.ascii_lowercase if ch not in letters_guessed])
 
+def correct_guess(secret_word, guess):
+  """
+  secret_word: string, the lowercase word the user is guessing
+  guess: single letter that the user has guessed in one round
 
+  returns: True if the secret word contains the guessed letter. False if it doesn't, or if the guess is longer than one letter.
+  """
+  if len(guess) > 1:
+    return False
+
+  return guess in secret_word
+
+def reveal_letter(secret_word, available_letters):
+  choose_from = "".join(set(secret_word).intersection(set(available_letters)))
+  new = random.randint(0, len(choose_from) - 1)
+  return choose_from[new]
 
 def hangman(secret_word, with_help):
     """
@@ -129,7 +144,56 @@ def hangman(secret_word, with_help):
     Follows the other limitations detailed in the problem write-up.
     """
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    guesses_left = 10
+    letters_guessed = []
+    
+    print(f"I am thinking of a word that is {len(secret_word)} letters long.")
+
+    while guesses_left > 0 and not has_player_won(secret_word, letters_guessed):
+      print("--------------")
+      print(f"You have {guesses_left} guesses left.")
+      print(f"Available letters: {get_available_letters(letters_guessed)}")
+
+      guessed_letter = input("Please guess a letter: ")
+
+      if len(guessed_letter) > 1 or (not guessed_letter.isalpha() and (with_help and guessed_letter != '!')):
+        print("Oops! That is not a valid letter. Please input a letter from the alphabet:")
+        
+      elif guessed_letter == '!' and with_help:
+        if guesses_left < 3:
+          print("Oops! Not enough guesses left:")
+        else:
+          revealed_letter = reveal_letter(secret_word, get_available_letters(letters_guessed))
+          print(f"Letter revealed: {revealed_letter}")
+          letters_guessed.append(revealed_letter)
+          guesses_left -= 3
+          
+      else:
+        guessed_letter = guessed_letter.lower()
+
+        if guessed_letter in letters_guessed:
+          print("Oops! You've already guessed that letter:")
+        else:
+          letters_guessed.append(guessed_letter)
+
+          if correct_guess(secret_word, guessed_letter):
+            print("Good guess:")
+          else:
+            print("Oops! That letter is not in my word:")
+            vowels = {'a', 'e', 'i', 'o', 'u'}
+            guesses_left -= 2 if guessed_letter in vowels else 1
+
+      
+      print(f" {get_word_progress(secret_word, letters_guessed)}")
+
+    print("--------------")
+    if has_player_won(secret_word, letters_guessed):
+      total_score = (guesses_left + 4 * len(set(secret_word))) + (3 * len(secret_word))
+
+      print("Congratulations, you won!")
+      print(f"Your total score for this game is: {total_score}")
+    else:
+      print(f"Sorry, you ran out of guesses. The word was {secret_word}.")
 
 
 
