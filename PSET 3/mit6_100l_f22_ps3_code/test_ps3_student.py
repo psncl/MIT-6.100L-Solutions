@@ -531,12 +531,12 @@ class Results_600(unittest.TextTestResult):
 if __name__ == '__main__':
     
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestPrepData))
-    suite.addTest(unittest.makeSuite(TestWordFrequency))
-    suite.addTest(unittest.makeSuite(TestLetterFrequency))
-    suite.addTest(unittest.makeSuite(TestGetFrequentWords))
-    suite.addTest(unittest.makeSuite(TestSimilarity))
-    suite.addTest(unittest.makeSuite(TestTFIDF))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestPrepData))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestWordFrequency))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestLetterFrequency))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestGetFrequentWords))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestSimilarity))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestTFIDF))
     result = unittest.TextTestRunner(verbosity=4, resultclass=Results_600).run(suite)
 
     output = result.getOutput()
